@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Sarah Atawi — Portfolio"
+description = "A premium bilingual personal portfolio for Sarah Atawi, a Computer Science graduate, mobile application developer, and UI/UX designer."
+version = "1.0.0"
+id = "artifacts/sarah-atawi-portfolio"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22319
+
+[services.development]
+run = "pnpm --filter @workspace/sarah-atawi-portfolio run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sarah-atawi-portfolio", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/sarah-atawi-portfolio/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22319"
+BASE_PATH = "/"

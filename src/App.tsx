@@ -1,10 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Github, Linkedin, Mail, Menu, Minus, Phone, Plus, X, Database, Code2, LayoutDashboard, Search, Layers, Box, Cpu, Link as LinkIcon, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { SiAndroidstudio, SiDart, SiFirebase, SiFigma, SiFlutter, SiGithub, SiGooglechrome } from 'react-icons/si';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, GraduationCap, Glasses, Users, ChevronRight, Github, Linkedin, Mail, Menu, Minus, Phone, Plus, X, Database, Code2, LayoutDashboard, Search, Layers, Box, Cpu, Link as LinkIcon, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { SiAndroidstudio, SiDart, SiFirebase, SiFigma, SiFlutter, SiGithub, SiGooglechrome, SiMeta, SiUnity } from 'react-icons/si';
 import { VscCode } from 'react-icons/vsc';
 import { Link, Route, Switch, useLocation, useParams } from 'wouter';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { copy, experience, projects, leadershipCards, type LeadershipCard, type Language, type Project, type ProjectMedia, workshops } from '@/lib/content';
+import { copy, education, experience, projects, leadershipCards, type LeadershipCard, type Language, type Project, type ProjectMedia, workshops } from '@/lib/content';
 
 type Localized = { en: string; ar: string };
 
@@ -143,7 +143,8 @@ function SiteNav({ lang, onChange }: { lang: Language; onChange: (language: Lang
     { href: '#about', label: c.nav[0] },
     { href: '#work', label: c.nav[1] },
     { href: '#experience', label: c.nav[2] },
-    { href: '#contact', label: c.nav[3] },
+    { href: '#education', label: c.nav[3] },
+    { href: '#contact', label: c.nav[4] },
   ];
   return (
     <header className="fixed inset-x-0 top-0 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl" data-testid="site-navigation">
@@ -152,7 +153,7 @@ function SiteNav({ lang, onChange }: { lang: Language; onChange: (language: Lang
           <span className="grid h-7 w-7 place-items-center border border-primary/70 text-xs font-semibold text-primary">SA</span>
           <span className="hidden text-xs tracking-[0.12em] text-foreground sm:block">{lang === 'ar' ? 'ساره عطوي' : 'Sarah Atawi'}</span>
         </a>
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label="Main navigation">
           {links.map((link) => (
             <a key={link.href} href={link.href} className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground" data-testid={`link-nav-${link.href.slice(1)}`}>
               {link.label}
@@ -262,7 +263,7 @@ function ProjectVisual({ project, large = false }: { project: Project; large?: b
   const visualAsset = large ? project.heroAsset : project.cardAsset;
   const visualAlt = large ? project.heroAlt : project.cardAlt;
   return (
-    <div className={`project-visual relative overflow-hidden border border-border/80 bg-secondary/60 ${large ? 'aspect-[16/8]' : 'aspect-[1.18/1]'}`} style={{ ['--project-accent' as string]: project.accent }} data-testid={`visual-project-${project.slug}`}>
+    <div className={`project-visual relative overflow-hidden border border-border/80 bg-secondary/60 ${large ? 'aspect-[16/8]' : 'aspect-[16/10]'}`} style={{ ['--project-accent' as string]: project.accent }} data-testid={`visual-project-${project.slug}`}>
       <div className="absolute inset-0 opacity-70" style={{ background: `radial-gradient(circle at 72% 25%, ${project.accent}40, transparent 34%), linear-gradient(135deg, transparent 35%, ${project.accent}10 36%, transparent 60%)` }} />
       <img src={projectAsset(visualAsset)} alt={localized(visualAlt, 'en')} className={`project-visual__image ${large ? '' : `project-visual__image--${project.slug}`} absolute inset-0 h-full w-full object-center transition-transform duration-700 group-hover:scale-[1.025]`} />
       <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-transparent to-transparent" />
@@ -272,22 +273,75 @@ function ProjectVisual({ project, large = false }: { project: Project; large?: b
   );
 }
 
+function RepoButton({ project, lang, size = 'sm' }: { project: Project; lang: Language; size?: 'sm' | 'lg' }) {
+  const c = copy[lang];
+  const base = size === 'lg'
+    ? 'inline-flex items-center gap-4 border px-5 py-4 text-sm'
+    : 'inline-flex items-center gap-2 border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.13em]';
+  if (project.repositoryUrl) {
+    return (
+      <a href={project.repositoryUrl} target="_blank" rel="noreferrer" className={`repo-button group/repo ${base} border-primary/40 bg-primary/5 text-foreground transition-colors hover:border-primary hover:bg-primary/10`} data-testid={`link-repo-${project.slug}`}>
+        <SiGithub className={size === 'lg' ? 'h-5 w-5 text-primary' : 'h-3.5 w-3.5 text-primary'} aria-hidden="true" />
+        <span>{c.github}</span>
+        <ArrowUpRight className="h-3.5 w-3.5 text-primary transition-transform group-hover/repo:-translate-y-0.5 group-hover/repo:translate-x-0.5" aria-hidden="true" />
+      </a>
+    );
+  }
+  if (project.repositoryPending) {
+    // TODO(github-link): replace with the public repository URL by setting `repositoryUrl` in content.ts.
+    return (
+      <span className={`repo-button repo-button--pending ${base} cursor-not-allowed border-dashed border-border text-muted-foreground`} aria-disabled="true" title={c.repoSoon} data-testid={`placeholder-repo-${project.slug}`}>
+        <SiGithub className={size === 'lg' ? 'h-5 w-5' : 'h-3.5 w-3.5'} aria-hidden="true" />
+        <span>{c.repoSoon}</span>
+      </span>
+    );
+  }
+  return null;
+}
+
 function ProjectCard({ project, lang }: { project: Project; lang: Language }) {
   const c = copy[lang];
+  const skills = project.skills ?? [];
+  const shownSkills = skills.slice(0, 5);
   return (
-    <Reveal>
-      <Link href={`/work/${project.slug}`} className="project-card group block h-full" data-testid={`link-project-${project.slug}`}>
-        <ProjectVisual project={project} />
-        <div className="mt-5 flex items-start justify-between gap-4">
-          <div>
-            <h3 className="font-display text-3xl tracking-[-0.04em] text-foreground">{lang === 'ar' ? project.arabicTitle : project.title}</h3>
-            <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{lang === 'ar' ? project.arabicCategory : project.category}</p>
+    <Reveal className="h-full">
+      <article className="project-card group flex h-full flex-col" data-testid={`card-project-${project.slug}`}>
+        <Link href={`/work/${project.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={`${c.viewCase}: ${lang === 'ar' ? project.arabicTitle : project.title}`} data-testid={`link-project-${project.slug}`}>
+          <ProjectVisual project={project} />
+        </Link>
+        <div className="mt-6 flex flex-1 flex-col">
+          <p className="flex items-center gap-3 font-mono-custom text-[10px] uppercase tracking-[0.18em] text-primary">
+            <span>{project.index}</span><span className="h-px w-6 bg-primary/50" aria-hidden="true" />
+            <span className="text-muted-foreground">{lang === 'ar' ? project.arabicCategory : project.category}</span>
+          </p>
+          <Link href={`/work/${project.slug}`} className="mt-3 flex items-start justify-between gap-4">
+            <h3 className="font-display text-3xl tracking-[-0.04em] text-foreground transition-colors group-hover:text-primary lg:text-4xl">{lang === 'ar' ? project.arabicTitle : project.title}</h3>
+            <ArrowUpRight className={`mt-2 h-5 w-5 shrink-0 text-muted-foreground transition-all duration-500 group-hover:-translate-y-1 group-hover:text-primary ${lang === 'ar' ? '-scale-x-100 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
+          </Link>
+          <p className="project-card__intro mt-4 text-sm leading-7 text-muted-foreground">{lang === 'ar' ? project.arabicIntro : project.intro}</p>
+          {shownSkills.length > 0 && (
+            <ul className="mt-5 flex flex-wrap gap-2" aria-label={lang === 'ar' ? 'التقنيات' : 'Technologies'}>
+              {shownSkills.map((skill) => (
+                <li key={skill.en} className="project-chip" dir="auto">{localized(skill, lang)}</li>
+              ))}
+              {skills.length > shownSkills.length && <li className="project-chip project-chip--more">+{skills.length - shownSkills.length}</li>}
+            </ul>
+          )}
+          {project.team && (
+            <p className="mt-5 flex items-start gap-2 text-xs leading-6 text-muted-foreground">
+              <Users className="mt-1 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
+              <span><span className="text-foreground/80">{c.team}: </span>{project.team.map((member) => localized(member, lang)).join(lang === 'ar' ? '، ' : ', ')}</span>
+            </p>
+          )}
+          <div className="h-6 shrink-0" aria-hidden="true" />
+          <div className="mt-auto flex flex-wrap items-center gap-3 border-t border-border/60 pt-5">
+            <Link href={`/work/${project.slug}`} className="inline-flex items-center gap-2 px-1 py-2 text-[10px] font-semibold uppercase tracking-[0.13em] text-primary transition-colors hover:text-foreground" data-testid={`link-case-${project.slug}`}>
+              {c.viewCase} <ArrowRight className={`h-3.5 w-3.5 ${lang === 'ar' ? 'rotate-180' : ''}`} aria-hidden="true" />
+            </Link>
+            <RepoButton project={project} lang={lang} />
           </div>
-          <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-muted-foreground transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary" />
         </div>
-        <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">{lang === 'ar' ? project.arabicIntro : project.intro}</p>
-        <span className="mt-5 inline-block text-[10px] uppercase tracking-[0.16em] text-primary opacity-0 transition-opacity duration-500 group-hover:opacity-100">{c.viewCase} ↗</span>
-      </Link>
+      </article>
     </Reveal>
   );
 }
@@ -529,7 +583,7 @@ function HomePage({ lang, onChange }: { lang: Language; onChange: (language: Lan
               <SectionHeading number="02" id="work-heading" className="mb-0">{c.selected}</SectionHeading>
               {c.selectedIntro && <p className="max-w-xs text-sm leading-7 text-muted-foreground">{c.selectedIntro}</p>}
             </div>
-            <div className="mt-20 grid gap-16 md:grid-cols-3 md:gap-7 lg:gap-12">
+            <div className="mt-20 grid gap-10 md:grid-cols-2 md:gap-8 lg:gap-12">
               {projects.map((project) => <ProjectCard key={project.slug} project={project} lang={lang} />)}
             </div>
           </div>
@@ -554,10 +608,38 @@ function HomePage({ lang, onChange }: { lang: Language; onChange: (language: Lan
              </div>
         </section>
 
+        <section id="education" className="education-section scroll-mt-20 border-t border-border/70" aria-labelledby="education-heading">
+          <div className="mx-auto max-w-[1440px] px-6 py-28 sm:px-10 sm:py-40 lg:px-14">
+            <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+              <SectionHeading number="04" id="education-heading" className="mb-0">{c.education}</SectionHeading>
+              <p className="max-w-xs text-sm leading-7 text-muted-foreground">{c.educationIntro}</p>
+            </div>
+            <div className="mt-16 grid gap-6 md:grid-cols-2">
+              {education.map((entry) => {
+                const Icon = entry.kind === 'degree' ? GraduationCap : Glasses;
+                return (
+                  <Reveal key={entry.id} className="h-full">
+                    <article className={`education-card education-card--${entry.kind} relative flex h-full flex-col border border-border/80 p-6 sm:p-8`} data-testid={`card-education-${entry.id}`}>
+                      <div className="flex items-start justify-between gap-4">
+                        <span className="grid h-11 w-11 place-items-center border border-primary/50 text-primary"><Icon className="h-5 w-5" aria-hidden="true" /></span>
+                        <span className={`education-badge education-badge--${entry.kind}`}>{entry.kind === 'degree' ? c.degree : c.training}</span>
+                      </div>
+                      <p className="mt-8 text-[10px] uppercase tracking-[0.16em] text-primary">{localized(entry.institution, lang)}</p>
+                      <h3 className="mt-3 font-display text-2xl leading-tight tracking-[-0.03em] text-foreground sm:text-3xl">{localized(entry.program, lang)}</h3>
+                      <p className="mt-3 text-xs uppercase tracking-[0.12em] text-muted-foreground">{localized(entry.type, lang)}</p>
+                      {entry.note && <p className="mt-6 border-t border-border/60 pt-5 text-sm leading-7 text-muted-foreground">{localized(entry.note, lang)}</p>}
+                    </article>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <section id="leadership" className="leadership-section border-y border-border/70 bg-card/25">
           <div className="mx-auto max-w-[1440px] px-6 py-28 sm:px-10 sm:py-40 lg:px-14">
             <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end mb-16">
-              <SectionHeading number="04" className="mb-0">{c.leadership}</SectionHeading>
+              <SectionHeading number="05" className="mb-0">{c.leadership}</SectionHeading>
               <p className="max-w-xs text-sm leading-7 text-muted-foreground">{c.leadershipIntro}</p>
             </div>
 
@@ -574,7 +656,7 @@ function HomePage({ lang, onChange }: { lang: Language; onChange: (language: Lan
           {[{ title: c.workshops, items: workshops, kind: 'workshops' }, { title: c.certifications, items: [], kind: 'certifications' }].map((group) => (
              <div key={group.title} className={`${group.kind === 'certifications' ? 'certifications-panel lg:col-span-2' : 'workshops-panel'} border-t border-border pt-6`}>
               <div className="flex items-center justify-between">
-                 <SectionHeading number={group.kind === 'certifications' ? '06' : '05'} className="mb-0">{group.title}</SectionHeading>
+                 <SectionHeading number={group.kind === 'certifications' ? '07' : '06'} className="mb-0">{group.title}</SectionHeading>
                 <span className="font-mono-custom text-[10px] text-muted-foreground">/ 0{group.kind === 'certifications' ? certificateAssets.length : group.items.length}</span>
               </div>
               {group.kind === 'certifications' ? (
@@ -597,7 +679,7 @@ function HomePage({ lang, onChange }: { lang: Language; onChange: (language: Lan
 
          <section id="contact" className="contact-section contact-section--final scroll-mt-20 border-t border-border/70" aria-labelledby="contact-heading">
           <div className="mx-auto max-w-[1440px] px-6 py-32 sm:px-10 sm:py-48 lg:px-14">
-            <SectionHeading number="07" id="contact-heading">{c.contactLabel}</SectionHeading>
+            <SectionHeading number="08" id="contact-heading">{c.contactLabel}</SectionHeading>
             <div className="mt-16 grid gap-10 border-t border-border pt-7 md:grid-cols-[1fr_auto] md:items-end">
               <p className="max-w-md text-sm leading-7 text-muted-foreground">{c.contactBody}</p>
               <a href="mailto:srh.alatwi@gmail.com" className="group inline-flex w-fit items-center gap-4 border-b border-primary pb-3 text-sm text-foreground transition-colors hover:text-primary" data-testid="link-say-hello">
@@ -650,6 +732,13 @@ const techIcons: Record<string, React.ElementType> = {
   'Usability Testing': Search,
   'RTL': LayoutDashboard,
   'WebView': Code2,
+  'Unity': SiUnity,
+  'C#': Code2,
+  'Meta Quest 3': SiMeta,
+  'XR Interaction Toolkit': Glasses,
+  'Virtual Reality (VR)': Glasses,
+  'Multiplayer / Multi-device VR': Users,
+  'UI/UX Design': LayoutDashboard,
 };
 
 function getSectionContent(project: Project, sectionKey: string, lang: Language) {
@@ -716,6 +805,9 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
 
   const problemText = getSectionContent(project, 'problem', lang);
   const solutionText = getSectionContent(project, 'solution', lang);
+  let sectionCounter = 0;
+  const nextNumber = () => String(++sectionCounter).padStart(2, '0');
+  const hasProblemSolution = ['talaqi', 'rateel', 'banner-system'].includes(project.slug);
 
   return (
     <div lang={lang} className={`min-h-[100dvh] bg-background text-foreground ${lang === 'ar' ? 'font-arabic' : ''}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -746,7 +838,7 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           {/* 01 Overview */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-01">
-              <SectionHeading number="01">{lang === 'ar' ? 'نظرة عامة' : 'Overview'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'نظرة عامة' : 'Overview'}</SectionHeading>
               <div className="max-w-3xl text-muted-foreground text-base leading-8">
                 <p>{localized(project.sections.overview.body, lang)}</p>
               </div>
@@ -754,27 +846,43 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           </Reveal>
 
           {/* 02 Problem & 03 Solution */}
+          {hasProblemSolution ? (
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-02-03">
               <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                 <div className="bg-secondary/20 border border-border/50 p-8 rounded-xl relative overflow-hidden">
                   <div className="absolute top-0 end-0 p-4 opacity-5"><AlertCircle className="w-24 h-24" /></div>
-                  <SectionHeading number="02">{lang === 'ar' ? 'المشكلة' : 'The Problem'}</SectionHeading>
+                  <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'المشكلة' : 'The Problem'}</SectionHeading>
                   <p className="mt-6 text-muted-foreground text-sm leading-7 relative z-10">{problemText[lang]}</p>
                 </div>
                 <div className="bg-primary/5 border border-primary/20 p-8 rounded-xl relative overflow-hidden">
                   <div className="absolute top-0 end-0 p-4 opacity-5 text-primary"><CheckCircle2 className="w-24 h-24" /></div>
-                  <SectionHeading number="03">{lang === 'ar' ? 'الحل' : 'The Solution'}</SectionHeading>
+                  <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'الحل' : 'The Solution'}</SectionHeading>
                   <p className="mt-6 text-foreground text-sm leading-7 relative z-10">{solutionText[lang]}</p>
                 </div>
               </div>
             </section>
           </Reveal>
+          ) : project.team && (
+          <Reveal>
+            <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-02-team">
+              <SectionHeading number={nextNumber()}>{copy[lang].team}</SectionHeading>
+              <ul className="grid gap-4 sm:grid-cols-3">
+                {project.team.map((member, i) => (
+                  <li key={member.en} className="flex items-center gap-4 border border-border/50 bg-secondary/20 p-5 rounded-xl">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/10 font-mono-custom text-[10px] text-primary">0{i + 1}</span>
+                    <span className="text-sm text-foreground">{localized(member, lang)}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </Reveal>
+          )}
 
           {/* 04 Tools & Technologies */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-04">
-              <SectionHeading number="04">{lang === 'ar' ? 'التقنيات والأدوات' : 'Tools & Technologies'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'التقنيات والأدوات' : 'Tools & Technologies'}</SectionHeading>
               {localized(project.sections.technologies.body, lang) && (
                 <p className="max-w-3xl text-muted-foreground text-base leading-8 mb-8">{localized(project.sections.technologies.body, lang)}</p>
               )}
@@ -785,7 +893,7 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
                   return (
                     <div key={itemName} className="flex items-center gap-3 bg-secondary/30 border border-border/60 px-4 py-2.5 rounded-lg text-sm text-foreground">
                       <Icon className="w-4 h-4 text-primary" />
-                      <span>{localized(item, lang)}</span>
+                      <span dir="auto">{localized(item, lang)}</span>
                     </div>
                   );
                 })}
@@ -796,7 +904,7 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           {/* 05 Design & Development */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-05">
-              <SectionHeading number="05">{lang === 'ar' ? 'التصميم والتطوير' : 'Design & Development'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'التصميم والتطوير' : 'Design & Development'}</SectionHeading>
               <div className="text-muted-foreground text-base leading-8">
                 <p className="mb-8 max-w-3xl">{localized(project.sections.process.body, lang)}</p>
                 {project.sections.process.items && (
@@ -816,7 +924,7 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           {/* 06 Key Features */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-06">
-              <SectionHeading number="06">{lang === 'ar' ? 'الميزات الرئيسية' : 'Key Features'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'الميزات الرئيسية' : 'Key Features'}</SectionHeading>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {project.keyFeatures.map((feature, i) => (
                   <div key={feature.en} className="flex gap-4 p-5 bg-card/30 border border-border/50 rounded-xl transition-colors hover:border-primary/40">
@@ -831,9 +939,10 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           </Reveal>
 
           {/* 07 Challenges & Solutions */}
+          {hasProblemSolution && (
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-07">
-              <SectionHeading number="07">{lang === 'ar' ? 'التحديات والحلول' : 'Challenges & Solutions'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'التحديات والحلول' : 'Challenges & Solutions'}</SectionHeading>
               {project.slug === 'talaqi' ? (
                 <div className="grid gap-4 md:grid-cols-3">
                   {getTalaqiChallenges(lang).map((challenge, index) => (
@@ -858,11 +967,12 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
               )}
             </section>
           </Reveal>
+          )}
 
           {/* 08 Visual Showcase */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-08">
-              <SectionHeading number="08">{lang === 'ar' ? 'العرض البصري' : 'Visual Showcase'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'العرض البصري' : 'Visual Showcase'}</SectionHeading>
               <ProjectMediaGallery media={project.gallery} lang={lang} compact={project.slug === 'talaqi'} />
             </section>
           </Reveal>
@@ -870,7 +980,7 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           {/* 09 Results / Impact */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-09">
-              <SectionHeading number="09">{lang === 'ar' ? 'النتائج والأثر' : 'Results / Impact'}</SectionHeading>
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'النتائج والأثر' : 'Results / Impact'}</SectionHeading>
               <div className="max-w-3xl text-muted-foreground text-base leading-8">
                 <p>{localized(project.sections.impact.body, lang)}</p>
               </div>
@@ -880,8 +990,10 @@ function CaseStudyPage({ lang, onChange }: { lang: Language; onChange: (language
           {/* 10 Links / Demo */}
           <Reveal>
             <section className="scroll-mt-24 border-t border-border/70 pt-10" id="section-10">
-              <SectionHeading number="10">{lang === 'ar' ? 'الروابط والعروض' : 'Links / Demo'}</SectionHeading>
-              {project.repositoryUrl ? (
+              <SectionHeading number={nextNumber()}>{lang === 'ar' ? 'الروابط والعروض' : 'Links / Demo'}</SectionHeading>
+              {project.repositoryPending && !project.repositoryUrl ? (
+                <RepoButton project={project} lang={lang} size="lg" />
+              ) : project.repositoryUrl ? (
                 <a
                   href={project.repositoryUrl}
                   target="_blank"

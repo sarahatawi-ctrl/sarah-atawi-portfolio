@@ -33,6 +33,10 @@ export type Project = {
   heroAsset: string;
   heroAlt: Localized;
   repositoryUrl?: string;
+  /** Show a GitHub button even before the repository is public (renders as a "coming soon" placeholder). */
+  repositoryPending?: boolean;
+  team?: Localized[];
+  skills?: Localized[];
   gallery: ProjectMedia[];
   keyFeatures: Localized[];
   sections: {
@@ -241,6 +245,119 @@ export const projects: Project[] = [
       },
     },
   },
+  {
+    slug: 'captain-crew',
+    index: '04',
+    title: 'Captain Crew',
+    arabicTitle: 'كابتن كرو',
+    category: 'Virtual Reality · Team Project',
+    arabicCategory: 'الواقع الافتراضي · مشروع جماعي',
+    context: 'Virtual Reality',
+    arabicContext: 'الواقع الافتراضي',
+    intro: 'An immersive Virtual Reality experience developed with Unity and Meta Quest 3: an interactive VR environment where participants engage with tasks and activities in a shared virtual experience.',
+    arabicIntro: 'تجربة واقع افتراضي غامرة طُوّرت باستخدام Unity وMeta Quest 3: بيئة VR تفاعلية يشارك فيها المستخدمون في مهام وأنشطة ضمن تجربة افتراضية مشتركة.',
+    accent: '#8b5cf6',
+    cardAsset: 'captain-crew/gallery/11_dimmed_aisle.jpg',
+    cardAlt: { en: 'Aircraft cabin aisle in Captain Crew with guided task markers', ar: 'ممر مقصورة الطائرة في كابتن كرو مع علامات إرشادية للمهام' },
+    heroAsset: 'captain-crew/gallery/01_intro.jpg',
+    heroAlt: { en: 'Captain Crew welcome screen inside the virtual aircraft cabin', ar: 'شاشة الترحيب في كابتن كرو داخل مقصورة الطائرة الافتراضية' },
+    repositoryPending: true,
+    team: [
+      { en: 'Sarah Atawi', ar: 'ساره عطوي' },
+      { en: 'Remas Al-Sultan', ar: 'ريماس السلطان' },
+      { en: 'Jana Alhamedi', ar: 'جنى الحامدي' },
+    ],
+    skills: [
+      { en: 'Unity', ar: 'Unity' },
+      { en: 'C#', ar: 'C#' },
+      { en: 'Virtual Reality (VR)', ar: 'الواقع الافتراضي (VR)' },
+      { en: 'Meta Quest 3', ar: 'Meta Quest 3' },
+      { en: 'XR Interaction Toolkit', ar: 'XR Interaction Toolkit' },
+      { en: 'Multiplayer / Multi-device VR Experiences', ar: 'تجارب VR متعددة المستخدمين والأجهزة' },
+      { en: 'UI/UX Design', ar: 'تصميم UI/UX' },
+      { en: 'GitHub & Collaborative Development', ar: 'GitHub والتطوير التعاوني' },
+    ],
+    gallery: [
+      { type: 'image', src: 'captain-crew/gallery/01_intro.jpg', alt: { en: 'Welcome screen and simulator rules', ar: 'شاشة الترحيب وتعليمات المحاكي' }, featured: true },
+      { type: 'image', src: 'captain-crew/gallery/02_cabin_markers.jpg', alt: { en: 'Guided task markers along the cabin', ar: 'علامات إرشادية للمهام على امتداد المقصورة' } },
+      { type: 'image', src: 'captain-crew/gallery/03_bins.jpg', alt: { en: 'Overhead bins task', ar: 'مهمة الخزائن العلوية' } },
+      { type: 'image', src: 'captain-crew/gallery/05_equipment.jpg', alt: { en: 'Emergency equipment check', ar: 'فحص معدات الطوارئ' } },
+      { type: 'image', src: 'captain-crew/gallery/06_exit_row.jpg', alt: { en: 'Emergency exit row', ar: 'صف مخرج الطوارئ' } },
+      { type: 'image', src: 'captain-crew/gallery/08_m2_bags.jpg', alt: { en: 'Mission 2: bags in the aisle', ar: 'المهمة الثانية: الحقائب في الممر' } },
+      { type: 'image', src: 'captain-crew/gallery/09_m2_passengers.jpg', alt: { en: 'Mission 2: seated passengers', ar: 'المهمة الثانية: الركاب في مقاعدهم' } },
+      { type: 'image', src: 'captain-crew/gallery/11_dimmed_aisle.jpg', alt: { en: 'Dimmed cabin lighting', ar: 'إضاءة المقصورة الخافتة' } },
+      { type: 'image', src: 'captain-crew/gallery/13_score.jpg', alt: { en: 'Mission debrief with time and score', ar: 'ملخص المهمة مع الوقت والنتيجة' } },
+    ],
+    keyFeatures: [
+      { en: 'Two training missions: pre-flight cabin preparation, and boarding / pre-take-off', ar: 'مهمتان تدريبيتان: تجهيز المقصورة قبل الرحلة، والصعود وما قبل الإقلاع' },
+      { en: 'Natural hand interaction with cabin objects', ar: 'تفاعل طبيعي باليدين مع عناصر المقصورة' },
+      { en: 'In-headset checklist tablet', ar: 'جهاز لوحي لقائمة المهام داخل التجربة' },
+      { en: 'Guided markers that lead to each task', ar: 'علامات إرشادية توجّه إلى كل مهمة' },
+      { en: 'Timer and score debrief after each mission', ar: 'مؤقت وملخص للنتيجة بعد كل مهمة' },
+      { en: 'Seated passengers and dynamic cabin and emergency lighting', ar: 'ركاب في مقاعدهم وإضاءة ديناميكية للمقصورة والطوارئ' },
+    ],
+    sections: {
+      overview: {
+        label: { en: 'Overview', ar: 'نظرة عامة' },
+        title: { en: 'An interactive VR environment for hands-on tasks.', ar: 'بيئة واقع افتراضي تفاعلية للمهام العملية.' },
+        body: { en: 'Captain Crew is an immersive Virtual Reality experience developed with Unity and Meta Quest 3. It places participants inside a virtual aircraft cabin, an interactive environment where they engage with tasks and activities in a shared virtual experience.', ar: 'كابتن كرو تجربة واقع افتراضي غامرة طُوّرت باستخدام Unity وMeta Quest 3. تضع المشاركين داخل مقصورة طائرة افتراضية، في بيئة تفاعلية يشاركون فيها في مهام وأنشطة ضمن تجربة افتراضية مشتركة.' },
+      },
+      role: {
+        label: { en: 'Team', ar: 'الفريق' },
+        title: { en: 'Built as a team.', ar: 'عمل جماعي.' },
+        body: { en: 'Developed by Sarah Atawi, Remas Al-Sultan, and Jana Alhamedi.', ar: 'طوّره كل من ساره عطوي، وريماس السلطان، وجنى الحامدي.' },
+      },
+      problemSolution: {
+        label: { en: 'Problem / solution', ar: 'المشكلة والحل' },
+        title: comingSoon,
+        body: comingSoon,
+      },
+      process: {
+        label: { en: 'Design & development', ar: 'التصميم والتطوير' },
+        title: { en: 'Designed for natural interaction in the headset.', ar: 'مصمّم للتفاعل الطبيعي داخل النظارة.' },
+        body: { en: 'The experience was built in Unity for Meta Quest 3 using the XR Interaction Toolkit, with in-world UI, a checklist tablet, and guided markers designed so participants always know what to do next. The team collaborated through GitHub.', ar: 'بُنيت التجربة باستخدام Unity لنظارة Meta Quest 3 عبر XR Interaction Toolkit، مع واجهات داخل البيئة الافتراضية، وجهاز لوحي لقائمة المهام، وعلامات إرشادية صُممت ليعرف المشارك دائمًا خطوته التالية. وتعاون الفريق عبر GitHub.' },
+        items: [{ en: 'Mission 1: cabin preparation', ar: 'المهمة 1: تجهيز المقصورة' }, { en: 'Mission 2: boarding & pre-take-off', ar: 'المهمة 2: الصعود وما قبل الإقلاع' }, { en: 'Score debrief', ar: 'ملخص النتيجة' }],
+      },
+      technologies: {
+        label: { en: 'Technologies', ar: 'التقنيات' },
+        title: { en: 'Unity and XR on Meta Quest 3.', ar: 'Unity وتقنيات XR على Meta Quest 3.' },
+        body: { en: '', ar: '' },
+        items: [{ en: 'Unity', ar: 'Unity' }, { en: 'C#', ar: 'C#' }, { en: 'Meta Quest 3', ar: 'Meta Quest 3' }, { en: 'XR Interaction Toolkit', ar: 'XR Interaction Toolkit' }, { en: 'Virtual Reality (VR)', ar: 'الواقع الافتراضي (VR)' }, { en: 'Multiplayer / Multi-device VR', ar: 'VR متعدد المستخدمين والأجهزة' }, { en: 'UI/UX Design', ar: 'تصميم UI/UX' }, { en: 'GitHub', ar: 'GitHub' }],
+      },
+      impact: {
+        label: { en: 'Results / impact', ar: 'النتائج والأثر' },
+        title: comingSoon,
+        body: { en: 'Each mission ends with a debrief showing total time, tasks completed, and a final score, giving participants clear feedback on their performance.', ar: 'تنتهي كل مهمة بملخص يعرض الوقت الإجمالي والمهام المنجزة والنتيجة النهائية، مما يمنح المشارك تغذية راجعة واضحة عن أدائه.' },
+      },
+    },
+  },
+];
+
+export type EducationEntry = {
+  id: string;
+  institution: Localized;
+  program: Localized;
+  type: Localized;
+  kind: 'degree' | 'training';
+  note?: Localized;
+};
+
+export const education: EducationEntry[] = [
+  {
+    id: 'pnu',
+    institution: { en: 'Princess Nourah bint Abdulrahman University', ar: 'جامعة الأميرة نورة بنت عبدالرحمن' },
+    program: { en: 'Computer Science', ar: 'علوم الحاسب' },
+    type: { en: 'Bachelor’s degree', ar: 'درجة البكالوريوس' },
+    kind: 'degree',
+  },
+  {
+    id: 'tuwaiq',
+    institution: { en: 'Tuwaiq Academy', ar: 'أكاديمية طويق' },
+    program: { en: 'Emerging Technologies and Virtual Worlds', ar: 'التقنيات الناشئة والعوالم الافتراضية' },
+    type: { en: 'Intensive Training Camp', ar: 'معسكر تدريبي مكثّف' },
+    kind: 'training',
+    note: { en: 'An intensive, hands-on training camp, not a university degree.', ar: 'معسكر تدريبي عملي مكثّف، وليس درجة جامعية.' },
+  },
 ];
 
 export const experience = [
@@ -365,7 +482,7 @@ export const copy = {
     enter: 'Enter portfolio',
     choose: 'Choose your language',
     languageNote: 'A personal archive of digital work, learning, and leadership.',
-    nav: ['About', 'Work', 'Cooperative Training', 'Contact'],
+    nav: ['About', 'Work', 'Cooperative Training', 'Education', 'Contact'],
     available: 'Available for meaningful work',
     heroEyebrow: 'Computer Science · Mobile Development · UI/UX',
     heroTitleA: 'I design the',
@@ -375,7 +492,7 @@ export const copy = {
     contactMe: 'Contact me',
     scroll: 'Scroll to explore',
      selected: 'Selected Work',
-    selectedIntro: 'Three studies in making complex things feel considered.',
+    selectedIntro: 'Studies in making complex things feel considered, from mobile apps to virtual reality.',
     viewCase: 'View case study',
     aboutLabel: 'A little context',
     aboutTitle: 'Technical by nature.\\nHuman in practice.',
@@ -415,13 +532,20 @@ export const copy = {
      close: 'Close preview',
      previous: 'Previous media',
      next: 'Next media',
+     education: 'Education',
+     educationIntro: 'Formal study and focused, hands-on training.',
+     degree: 'University degree',
+     training: 'Training camp',
+     team: 'Team',
+     repoSoon: 'Repository coming soon',
+     github: 'GitHub',
   },
   ar: {
     portfolio: 'ملف الأعمال',
     enter: 'الدخول إلى الملف',
     choose: 'اختاري اللغة',
     languageNote: '',
-    nav: ['نبذة عني', 'الأعمال', 'التدريب التعاوني', 'تواصل'],
+    nav: ['نبذة عني', 'الأعمال', 'التدريب التعاوني', 'التعليم', 'تواصل'],
     available: '',
     heroEyebrow: 'علوم الحاسب · تطوير تطبيقات الجوال · تصميم UI/UX',
     heroTitleA: 'ساره عطوي',
@@ -471,5 +595,12 @@ export const copy = {
      close: 'إغلاق المعاينة',
      previous: 'الوسائط السابقة',
      next: 'الوسائط التالية',
+     education: 'التعليم',
+     educationIntro: 'دراسة أكاديمية وتدريب عملي مركّز.',
+     degree: 'درجة جامعية',
+     training: 'معسكر تدريبي',
+     team: 'الفريق',
+     repoSoon: 'المستودع قريبًا',
+     github: 'GitHub',
   },
 } as const;
